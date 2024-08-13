@@ -94,6 +94,9 @@ UBOOT_SUFFIX ?= "bin"
 
 IMAGE_NAME_SUFFIX = ""
 
+# bootmcu multiconfig deploy path
+BOOTMCU_DEPLOY_DIR = "${TMPDIR}-bootmcu/deploy/images/ast2700_bootmcu"
+
 python() {
     # Compute rwfs LEB count and LEB size.
     page_size = d.getVar('FLASH_PAGE_SIZE', True)
@@ -264,6 +267,22 @@ do_generate_image_uboot_file() {
     image_dst="$1"
     uboot_offset=${FLASH_UBOOT_OFFSET}
 
+    if [ ! -z ${CALIPTRA_FW_BINARY} ]; then
+        dd bs=1k conv=notrunc seek=${FLASH_CALIPTRA_OFFSET} \
+            if=${BOOTMCU_DEPLOY_DIR}/${CALIPTRA_FW_BINARY} \
+            of=${image_dst}
+    fi
+
+    if [ -n "${SPL_BINARY}" -a -n "${BOOTMCU_FW_BINARY}" ]; then
+        bbfatal "SPL_BINARY and BOOTMCU_FW_BINARY should not be set at the same time."
+    fi
+
+    if [ ! -z ${BOOTMCU_FW_BINARY} ]; then
+        dd bs=1k conv=notrunc seek=${FLASH_BOOTMCU_OFFSET} \
+            if=${BOOTMCU_DEPLOY_DIR}/${BOOTMCU_FW_BINARY} \
+            of=${image_dst}
+    fi
+
     if [ ! -z ${SPL_BINARY} ]; then
         dd bs=1k conv=notrunc seek=${FLASH_UBOOT_OFFSET} \
             if=${DEPLOY_DIR_IMAGE}/u-boot-spl.${UBOOT_SUFFIX} \
@@ -297,6 +316,24 @@ python do_generate_static() {
                                'seek=%d' % start_kb,
                                'if=%s' % imgpath,
                                'of=%s' % nor_image])
+
+    caliptra_fw_binary = d.getVar('CALIPTRA_FW_BINARY', True)
+    if caliptra_fw_binary:
+        caliptra_fw_start_kb = int(d.getVar('FLASH_CALIPTRA_OFFSET', True))
+        caliptra_fw_finish_kb = caliptra_fw_start_kb + int(d.getVar('FLASH_CALIPTRA_SIZE', True))
+        _append_image(os.path.join(d.getVar('BOOTMCU_DEPLOY_DIR', True),
+                                   '%s' % (caliptra_fw_binary)),
+                      caliptra_fw_start_kb,
+                      caliptra_fw_finish_kb)
+
+    bmcu_fw_binary = d.getVar('BOOTMCU_FW_BINARY', True)
+    if bmcu_fw_binary:
+        bmcu_fw_start_kb = int(d.getVar('FLASH_BOOTMCU_OFFSET', True))
+        bmcu_fw_finish_kb = bmcu_fw_start_kb + int(d.getVar('FLASH_BOOTMCU_SIZE', True))
+        _append_image(os.path.join(d.getVar('BOOTMCU_DEPLOY_DIR', True),
+                                   '%s' % (bmcu_fw_binary)),
+                      bmcu_fw_start_kb,
+                      bmcu_fw_finish_kb)
 
     uboot_offset = int(d.getVar('FLASH_UBOOT_OFFSET', True))
 
@@ -352,6 +389,10 @@ do_generate_static[depends] += " \
         ${PN}:do_image_${@d.getVar('IMAGE_BASETYPE', True).replace('-', '_')} \
         virtual/kernel:do_deploy \
         u-boot:do_deploy \
+        "
+
+do_generate_static[mcdepends] = " \
+        ${@bb.utils.contains('MACHINE_FEATURES', 'bootmcu', 'mc::bootmcu:virtual/bootmcu:do_deploy', '', d)} \
         "
 
 make_signatures() {
@@ -458,6 +499,11 @@ do_generate_static_tar[depends] += " \
         ${SIGNING_KEY_DEPENDS} \
         ${PN}:do_copy_signing_pubkey \
         "
+
+do_generate_static_tar[mcdepends] = " \
+        ${@bb.utils.contains('MACHINE_FEATURES', 'bootmcu', 'mc::bootmcu:virtual/bootmcu:do_deploy', '', d)} \
+        "
+
 do_generate_static_tar[vardepsexclude] = "DATETIME"
 
 python do_generate_static_norootfs() {
@@ -531,6 +577,26 @@ python do_generate_static_norootfs() {
                                'if=%s' % imgpath,
                                'of=%s' % nor_image])
 
+    caliptra_fw_binary = d.getVar('CALIPTRA_FW_BINARY', True)
+    if caliptra_fw_binary:
+        caliptra_fw_start_kb = int(d.getVar('FLASH_CALIPTRA_OFFSET', True))
+        caliptra_fw_finish_kb = caliptra_fw_start_kb + int(d.getVar('FLASH_CALIPTRA_SIZE', True))
+        _append_image("caliptra", "caliptra",
+                      os.path.join(d.getVar('BOOTMCU_DEPLOY_DIR', True),
+                                   '%s' % (caliptra_fw_binary)),
+                      caliptra_fw_start_kb,
+                      caliptra_fw_finish_kb)
+
+    bmcu_fw_binary = d.getVar('BOOTMCU_FW_BINARY', True)
+    if bmcu_fw_binary:
+        bmcu_fw_start_kb = int(d.getVar('FLASH_BOOTMCU_OFFSET', True))
+        bmcu_fw_finish_kb = bmcu_fw_start_kb + int(d.getVar('FLASH_BOOTMCU_SIZE', True))
+        _append_image("bootmcu", "mcu",
+                      os.path.join(d.getVar('BOOTMCU_DEPLOY_DIR', True),
+                                   '%s' % (bmcu_fw_binary)),
+                      bmcu_fw_start_kb,
+                      bmcu_fw_finish_kb)
+
     uboot_offset = int(d.getVar('FLASH_UBOOT_OFFSET', True))
 
     spl_binary = d.getVar('SPL_BINARY', True)
@@ -596,6 +662,10 @@ do_generate_static_norootfs[depends] += " \
         u-boot:do_deploy \
         "
 
+do_generate_static_norootfs[mcdepends] = " \
+        ${@bb.utils.contains('MACHINE_FEATURES', 'bootmcu', 'mc::bootmcu:virtual/bootmcu:do_deploy', '', d)} \
+        "
+
 do_generate_ubi_tar() {
     ln -sf ${S}/MANIFEST MANIFEST
     ln -sf ${S}/publickey publickey
@@ -611,6 +681,10 @@ do_generate_ubi_tar[depends] += " \
         openssl-native:do_populate_sysroot \
         ${SIGNING_KEY_DEPENDS} \
         ${PN}:do_copy_signing_pubkey \
+        "
+
+do_generate_ubi_tar[mcdepends] = " \
+        ${@bb.utils.contains('MACHINE_FEATURES', 'bootmcu', 'mc::bootmcu:virtual/bootmcu:do_deploy', '', d)} \
         "
 
 do_generate_ext4_tar() {
@@ -657,6 +731,10 @@ do_generate_ext4_tar[depends] += " \
         ${SIGNING_KEY_DEPENDS} \
         ${PN}:do_copy_signing_pubkey \
         phosphor-hostfw-image:do_deploy \
+        "
+
+do_generate_ext4_tar[mcdepends] = " \
+        ${@bb.utils.contains('MACHINE_FEATURES', 'bootmcu', 'mc::bootmcu:virtual/bootmcu:do_deploy', '', d)} \
         "
 
 def get_pubkey_basedir(d):
