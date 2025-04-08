@@ -1,0 +1,7 @@
+[Unit]
+Description=GPIO SEL Logger:%i
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/phosphor-gpio-monitor/gpio_sel_logger %i
+SyslogIdentifier=gpio_sel_logger%i

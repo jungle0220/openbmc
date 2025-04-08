@@ -1,0 +1,22 @@
+#!/bin/bash
+
+log_message() {
+    local MESSAGE="GPIO $1 Trigged."
+
+    busctl call \
+        xyz.openbmc_project.Logging /xyz/openbmc_project/logging \
+        xyz.openbmc_project.Logging.Create Create "ssa{ss}" "$MESSAGE" \
+        "xyz.openbmc_project.Logging.Entry.Level.Informational" 1 "Event" "$2"
+}
+input="$1"
+
+if [[ "$input" != *":"* ]]; then
+    echo "Error: Invalid instance format, expected ':' separator"
+    exit 1
+fi
+
+GPIO_NET=$(echo "$input" | cut -d':' -f1)
+Event=$(echo "$input" | cut -d':' -f2)
+
+log_message "$GPIO_NET" "$Event"
+
