@@ -1,0 +1,80 @@
+[
+    {
+        "Name": "AC_PWR_BMC_BTN_N",
+        "LineName": "AC_PWR_BMC_BTN_N",
+        "EventMon": "FALLING",
+        "Targets": {
+            "FALLING": ["gpio_sel_logger@AC_PWR_BMC_BTN_N:FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "PWR_BTN_BMC_N",
+        "LineName": "PWR_BTN_BMC_N",
+        "EventMon": "FALLING",
+        "Targets": {
+            "FALLING": ["gpio_sel_logger@PWR_BTN_BMC_N:FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "ID_RST_BTN_BMC_N",
+        "LineName": "ID_RST_BTN_BMC_N",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["reset_btn@RISING.service"],
+            "FALLING": ["reset_btn@FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "ALERT_CLKMUX_0_LOSS_N",
+        "LineName": "ALERT_CLKMUX_0_LOSS_N",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["gpio_sel_logger@ALERT_CLKMUX_0_LOSS_N:RISING.service"],
+            "FALLING": ["gpio_sel_logger@ALERT_CLKMUX_0_LOSS_N:FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "ALERT_CLKMUX_1_LOSS_N",
+        "LineName": "ALERT_CLKMUX_1_LOSS_N",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["gpio_sel_logger@ALERT_CLKMUX_1_LOSS_N:RISING.service"],
+            "FALLING": ["gpio_sel_logger@ALERT_CLKMUX_1_LOSS_N:FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "ALERT_CLKMUX_2_LOSS_N",
+        "LineName": "ALERT_CLKMUX_2_LOSS_N",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["gpio_sel_logger@ALERT_CLKMUX_2_LOSS_N:RISING.service"],
+            "FALLING": ["gpio_sel_logger@ALERT_CLKMUX_2_LOSS_N:FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "ALERT_CLKMUX_3_LOSS_N",
+        "LineName": "ALERT_CLKMUX_3_LOSS_N",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["gpio_sel_logger@ALERT_CLKMUX_3_LOSS_N:RISING.service"],
+            "FALLING": ["gpio_sel_logger@ALERT_CLKMUX_3_LOSS_N:FALLING.service"]
+        },
+        "Continue": true
+    },
+    {
+        "Name": "FM_BMC_RTC_RST",
+        "LineName": "FM_BMC_RTC_RST",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["gpio_sel_logger@FM_BMC_RTC_RST:RISING.service"],
+            "FALLING": ["gpio_sel_logger@FM_BMC_RTC_RST:FALLING.service"]
+        },
+        "Continue": true
+    }
+]
