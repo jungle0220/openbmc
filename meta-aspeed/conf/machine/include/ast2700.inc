@@ -52,3 +52,6 @@ UBOOT_FIT_TEE_IMAGE ?= "${DEPLOY_DIR_IMAGE}/optee/tee-raw.bin"
 # bootmcu
 PREFERRED_PROVIDER_virtual/bootmcu ?= "bootmcu-spl"
 
+# Use ASPEED Linux
+PREFERRED_PROVIDER_virtual/kernel = "linux-aspeed-sdk"
+
