@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# shellcheck source=meta-facebook/meta-yosemite5/recipes-phosphor/state/phosphor-state-manager/power-cmd
+source /usr/libexec/phosphor-state-manager/power-cmd
+
+#Sled cycle
+echo "Starting Chassis Power Cycle"
+
+chassis-power-cycle() {
+    # MB CPLD
+    ret=$(i2cset -f -y 8 0x0F 0x0C 0xEF)
+    if [ "$ret" -ne 0 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+blade-power-cycle() {
+    # MB CPLD
+    ret=$(i2cset -f -y 8 0x0F 0x0C 0xFB)
+    if [ "$ret" -ne 0 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+ChassisNumber=$1
+
+if [ "$ChassisNumber" == 0 ]
+then
+  echo "Starting Chassis AC Cycle"
+  chassis-power-cycle
+else
+  echo "Starting AC Cycle"
+  blade-power-cycle
+fi
+
+
