@@ -96,6 +96,22 @@
             "FALLING": ["gpio_bypass@E1S_1_PRSNT_N:FALLING.service"]
         },
         "Continue": true
+    },
+        {
+        "Name": "PWRGD_CPU_PWROK",
+        "LineName": "PWRGD_CPU_PWROK",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": [
+                "deassert-power-good-drop.service",
+                "gpio_sel_logger@PWRGD_CPU_PWROK:RISING.service"
+            ],
+            "FALLING": [
+                "assert-power-good-drop.service",
+                "gpio_sel_logger@PWRGD_CPU_PWROK:FALLING.service"
+            ]
+        },
+        "Continue": true
     }
 
 ]
