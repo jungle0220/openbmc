@@ -7,23 +7,25 @@ source /usr/libexec/phosphor-state-manager/power-cmd
 echo "Starting Chassis Power Cycle"
 
 chassis-power-cycle() {
-    # MB CPLD
-    ret=$(i2cset -f -y 8 0x0F 0x0C 0xEF)
-    if [ "$ret" -ne 0 ]; then
+    # PDB CPLD
+    i2cset -f -y 8 0x0F 0x11 0xFE
+    if [ $? -ne 0 ]; then
         return 1
-    else
-        return 0
     fi
+    i2cset -f -y 11 0x0F 0x13 0x01
+
+    i2cset -f -y 9 0x0F 0x0C 0xFD
 }
 
 blade-power-cycle() {
-    # MB CPLD
-    ret=$(i2cset -f -y 8 0x0F 0x0C 0xFB)
+    # PDB CPLD
+    ret=$(i2cset -f -y 8 0x0F 0x10 0xFE)
     if [ "$ret" -ne 0 ]; then
         return 1
-    else
-        return 0
     fi
+    i2cset -f -y 11 0x0F 0x13 0x01
+
+    i2cset -f -y 9 0x0F 0x0C 0xFD
 }
 
 ChassisNumber=$1
