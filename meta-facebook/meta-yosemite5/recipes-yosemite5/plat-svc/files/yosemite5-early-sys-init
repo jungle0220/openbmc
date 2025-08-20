@@ -66,6 +66,8 @@ set_gpio JTAG_CPLD_DBREQ_R_N 1
 set_gpio HDT_HDR_RESET_R_N 1
 set_gpio FM_SMB_AUTH_MUX_OE_R_N 1
 set_gpio FM_SCM_LED_R_N 1
+# set BMC ready
+# SGPIO todo
 set_gpio SGPIO_BMC_READY 1
 
 exit 0
