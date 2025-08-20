@@ -36,5 +36,6 @@ set_gpio FM_CLKGEN_GPIO4 0
 
 # set BMC ready
 # SGPIO todo
+set_gpio SGPIO_BMC_READY 1
 
 exit 0
