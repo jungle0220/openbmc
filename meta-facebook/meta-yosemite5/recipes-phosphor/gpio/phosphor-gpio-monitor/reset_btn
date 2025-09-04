@@ -3,7 +3,7 @@
 source /usr/libexec/yosemite5-common-functions
 
 log_message() {
-    local MESSAGE="GPIO $1 Trigged, RST_BMC_RSTBTN_OUT_R_N = $3."
+    local MESSAGE="GPIO $1 Trigged, set SGPIO_RSTBTN_OUT = $3."
 
     busctl call \
         xyz.openbmc_project.Logging /xyz/openbmc_project/logging \
@@ -13,11 +13,10 @@ log_message() {
 
 input="$1"
 
-
 if [ "$input" == "RISING" ] ; then
-    set_gpio RST_BMC_RSTBTN_OUT_N       1
-    log_message "ID_RST_BTN_BMC_R_N" "$input" "1"
+    set_gpio SGPIO_RSTBTN_OUT       0
+    log_message "ID_RST_BTN_BMC_N" "$input" "0"
 elif [ "$input" == "FALLING" ] ; then
-    set_gpio RST_BMC_RSTBTN_OUT_N       0
-    log_message "ID_RST_BTN_BMC_R_N" "$input" "0"
+    set_gpio SGPIO_RSTBTN_OUT       1
+    log_message "ID_RST_BTN_BMC_N" "$input" "1"
 fi
