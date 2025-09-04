@@ -9,6 +9,8 @@ SRC_URI += "file://yosemite5-phosphor-multi-gpio-monitor.json \
             file://multi-gpios-sys-init.service \
             file://assert-host-ready.service \
             file://deassert-host-ready.service \
+            file://gpio_bypass \
+            file://gpio_bypass@.service \
             "
 
 RDEPENDS:${PN}:append = " bash"
@@ -34,6 +36,7 @@ do_install:append:() {
 
     install -d ${D}${libexecdir}/${PN}
     install -m 0755 ${UNPACKDIR}/reset_btn ${D}${libexecdir}/${PN}/
+    install -m 0755 ${UNPACKDIR}/gpio_bypass ${D}${libexecdir}/${PN}/
     install -m 0755 ${UNPACKDIR}/multi-gpios-sys-init ${D}${libexecdir}/${PN}/
 }
 
