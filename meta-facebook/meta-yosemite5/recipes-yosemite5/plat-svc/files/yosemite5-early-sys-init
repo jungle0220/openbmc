@@ -69,4 +69,7 @@ set_gpio FM_SCM_LED_R_N 1
 
 set_gpio SGPIO_BMC_READY 1
 
+set_gpio FM_CLKGEN_GPIO2 1
+set_gpio FM_CLKGEN_GPIO4 0
+
 exit 0
