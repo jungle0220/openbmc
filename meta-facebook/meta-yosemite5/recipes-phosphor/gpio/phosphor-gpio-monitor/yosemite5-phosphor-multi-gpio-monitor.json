@@ -68,16 +68,6 @@
         "Continue": true
     },
     {
-        "Name": "FM_BMC_RTC_RST",
-        "LineName": "FM_BMC_RTC_RST",
-        "EventMon": "BOTH",
-        "Targets": {
-            "RISING": ["gpio_sel_logger@FM_BMC_RTC_RST:RISING.service"],
-            "FALLING": ["gpio_sel_logger@FM_BMC_RTC_RST:FALLING.service"]
-        },
-        "Continue": true
-    },
-    {
         "Name": "RST_PCIE_BOOT_PERST_N",
         "LineName": "RST_PCIE_BOOT_PERST_N",
         "EventMon": "BOTH",
