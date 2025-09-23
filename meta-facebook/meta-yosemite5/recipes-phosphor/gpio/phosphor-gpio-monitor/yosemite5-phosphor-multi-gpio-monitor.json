@@ -97,7 +97,7 @@
         },
         "Continue": true
     },
-        {
+    {
         "Name": "PWRGD_CPU_PWROK",
         "LineName": "PWRGD_CPU_PWROK",
         "EventMon": "BOTH",
@@ -112,6 +112,15 @@
             ]
         },
         "Continue": true
+    },
+    {
+        "Name": "host0-ready",
+        "LineName": "host0-ready",
+        "EventMon": "BOTH",
+        "Targets": {
+            "RISING": ["deassert-host-ready.service"],
+            "FALLING": ["assert-host-ready.service"]
+        },
+        "Continue": true
     }
-
 ]
