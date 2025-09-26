@@ -5,7 +5,7 @@ source /usr/libexec/fb-common-functions
 
 # Power Good Status
 power_status() {
-    if [ "$(get_gpio "PWRGD_CPU_PWROK")" = "1" ]; then
+    if [ "$(get_gpio "PWRGD_CPU_PWROK_1")" = "1" ]; then
         echo "on"
     else
         echo "off"
