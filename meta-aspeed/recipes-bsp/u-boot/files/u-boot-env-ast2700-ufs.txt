@@ -1,5 +1,5 @@
-baudrate=115200
-bootargs=console=ttyS12,115200n8 root=/dev/ram rw earlycon
+baudrate=57600
+bootargs=console=ttyS12,57600n8 root=/dev/ram rw earlycon
 boota=setenv bootpart 2; setenv rootfs rofs-a; run setmmcargs; ext4load scsi 0:${bootpart} ${loadaddr} fitImage && bootm; echo Error loading kernel FIT image
 bootb=setenv bootpart 3; setenv rootfs rofs-b; run setmmcargs; ext4load scsi 0:${bootpart} ${loadaddr} fitImage && bootm; echo Error loading kernel FIT image
 bootcmd=run bootmmc
