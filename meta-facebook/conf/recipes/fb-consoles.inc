@@ -27,6 +27,7 @@ fb_get_consoles[vardeps] += "OBMC_HOST_INSTANCES OBMC_CONSOLE_HOST_TTY OBMC_CONS
 
 OBMC_CONSOLE_TTYS = "${@fb_get_consoles(d)}"
 OBMC_CONSOLE_TTYS:fb-nohost = ""
+OBMC_CONSOLE_TTYS:ast2700_bootmcu = ""
 OBMC_CONSOLE_TTYS[vardeps] += "fb_get_consoles"
 
 # Calculate the TTY assignments for the NICs.
