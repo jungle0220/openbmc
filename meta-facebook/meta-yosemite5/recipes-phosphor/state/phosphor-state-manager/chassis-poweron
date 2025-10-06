@@ -1,4 +1,10 @@
 #!/bin/bash
 
-echo "no support chassis power on"
+busctl set-property \
+xyz.openbmc_project.State.Chassis1 \
+/xyz/openbmc_project/state/chassis1 \
+xyz.openbmc_project.State.Chassis \
+CurrentPowerState s \
+xyz.openbmc_project.State.Chassis.PowerState.On
+
 exit 0
