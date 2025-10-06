@@ -8,8 +8,7 @@ echo "Starting Chassis Power Cycle"
 
 chassis-power-cycle() {
     # PDB CPLD
-    i2cset -f -y 8 0x0F 0x11 0xFE
-    if [ $? -ne 0 ]; then
+    if ! i2cset -f -y 8 0x0F 0x11 0xFE; then
         return 1
     fi
     i2cset -f -y 11 0x0F 0x13 0x01
@@ -19,8 +18,7 @@ chassis-power-cycle() {
 
 blade-power-cycle() {
     # PDB CPLD
-    ret=$(i2cset -f -y 8 0x0F 0x10 0xFE)
-    if [ "$ret" -ne 0 ]; then
+    if ! i2cset -f -y 8 0x0F 0x10 0xFE; then
         return 1
     fi
     i2cset -f -y 11 0x0F 0x13 0x01
