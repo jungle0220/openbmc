@@ -3,6 +3,7 @@
 # Temporarily add plat-svc for gpio initialization
 OBMC_IMAGE_EXTRA_INSTALL:append = " \
     plat-svc \
+    i3c-tools \
 "
 
 # Monitor presence gpio status
