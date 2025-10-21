@@ -88,9 +88,11 @@ SRC_URI:append = " \
     file://host-powerreset \
     file://host-powerreset@.service \
     file://power-cmd \
-    file://phosphor-state-manager-init \
     file://phosphor-state-manager-init.conf \
     "
+
+SRC_URI:append:aspeed-g6 = " file://ast2600/phosphor-state-manager-init"
+SRC_URI:append:aspeed-g7 = " file://ast2700/phosphor-state-manager-init"
 
 RDEPENDS:${PN}:append = " bash"
 
@@ -106,7 +108,13 @@ do_install:append() {
     install -m 0755 ${UNPACKDIR}/host-poweron ${D}${libexecdir}/${PN}/
     install -m 0755 ${UNPACKDIR}/host-powerreset ${D}${libexecdir}/${PN}/
     install -m 0755 ${UNPACKDIR}/power-cmd ${D}${libexecdir}/${PN}/
-    install -m 0755 ${UNPACKDIR}/phosphor-state-manager-init ${D}${libexecdir}/${PN}/
+}
+
+do_install:append:aspeed-g6() {
+    install -m 0755 ${UNPACKDIR}/ast2600/phosphor-state-manager-init ${D}${libexecdir}/${PN}/
+}
+do_install:append:aspeed-g7() {
+    install -m 0755 ${UNPACKDIR}/ast2700/phosphor-state-manager-init ${D}${libexecdir}/${PN}/
 }
 SYSTEMD_OVERRIDE:${PN}-discover += "discover-sys-init.conf:phosphor-discover-system-state@0.service.d/discover-sys-init.conf"
 SYSTEMD_OVERRIDE:${PN}-systemd-target-monitor += "phosphor-state-manager-init.conf:phosphor-systemd-target-monitor.service.d/phosphor-state-manager-init.conf"
