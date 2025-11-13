@@ -3,10 +3,14 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI:append = " \
     file://mctp_init.service \
     file://mctp_init.sh \
+    file://mctp_setup.service \
+    file://mctp_setup@.service \
+    file://mctp_setup.sh \
 "
 
 SYSTEMD_SERVICE:${PN}:append = " \
     mctp_init.service \
+    mctp_setup.service \
 "
 
 RDEPENDS:${PN}:append = "bash"
