@@ -2,10 +2,21 @@
 # shellcheck source=meta-facebook/meta-yosemite5/recipes-yosemite5/plat-tool/files/yosemite5-common-functions
 source /usr/libexec/yosemite5-common-functions
 
+log_message() {
+    local MESSAGE="GPIO $1 Trigged, set SGPIO_RSTBTN_OUT = $3."
+
+    busctl call \
+        xyz.openbmc_project.Logging /xyz/openbmc_project/logging \
+        xyz.openbmc_project.Logging.Create Create "ssa{ss}" "$MESSAGE" \
+        "xyz.openbmc_project.Logging.Entry.Level.Informational" 1 "Event" "$2"
+}
+
 input="$1"
 
 if [ "$input" == "RISING" ] ; then
-    set_gpio RST_BMC_RSTBTN_OUT_N       1
+    set_gpio SGPIO_RSTBTN_OUT       0
+    log_message "ID_RST_BTN_BMC_N" "$input" "0"
 elif [ "$input" == "FALLING" ] ; then
-    set_gpio RST_BMC_RSTBTN_OUT_N       0
+    set_gpio SGPIO_RSTBTN_OUT       1
+    log_message "ID_RST_BTN_BMC_N" "$input" "1"
 fi
